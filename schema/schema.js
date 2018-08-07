@@ -21,6 +21,10 @@ const CategoryType = new GraphQLObjectType({
         images: { 
             type: new GraphQLList(ImageType),
             resolve(parent, args){
+                [1,2,3,4,5].find(category => {
+                    debugger
+                    category.id === parent.categoryId
+                })
                 //return imageData.filter(image => image.categoryId === parent.id)
                 return Image.find({authorId: parent.Id})
             }
@@ -39,7 +43,6 @@ const ImageType = new GraphQLObjectType({
         category: {
             type: CategoryType,
             resolve(parent, args){
-                //return categoryData.find(category => category.id === parent.categoryId)
                 return Category.findById(parent.authorId)
             }
         }
