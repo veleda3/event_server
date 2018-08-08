@@ -115,6 +115,16 @@ const Mutation = new GraphQLObjectType({
                 });
                 return image.save();
             }
+        },
+        deleteImage: {
+            type: ImageType,
+            args: {
+                id: {type: GraphQLID}
+            },
+            resolve(parent, args){
+                let deletedImage = Image.findById(args.id)
+                return deletedImage.remove()
+            }
         }
     }
 })
