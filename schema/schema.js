@@ -22,7 +22,7 @@ const CategoryType = new GraphQLObjectType({
             type: new GraphQLList(ImageType),
             resolve(parent, args){
                 //return imageData.filter(image => image.categoryId === parent.id)
-                return Image.find({authorId: parent.Id})
+                return Image.find({categoryId: parent.id})
             }
 
         }
@@ -39,8 +39,7 @@ const ImageType = new GraphQLObjectType({
         category: {
             type: CategoryType,
             resolve(parent, args){
-                //return categoryData.find(category => category.id === parent.categoryId)
-                return Category.findById(parent.authorId)
+                return Category.findById(parent.categoryId)
             }
         }
 
@@ -115,6 +114,16 @@ const Mutation = new GraphQLObjectType({
                     categoryId: args.categoryId
                 });
                 return image.save();
+            }
+        },
+        deleteImage: {
+            type: ImageType,
+            args: {
+                id: {type: GraphQLID}
+            },
+            resolve(parent, args){
+                let deletedImage = Image.findById(args.id)
+                return deletedImage.remove()
             }
         }
     }
