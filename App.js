@@ -3,6 +3,8 @@ const graphqlHTTP = require('express-graphql')
 const schema = require('./schema/schema')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const path = require('path')
+const config = require('./config')
 
 mongoose.connect('mongodb://mayflower:mayflower123@ds113942.mlab.com:13942/events', { useNewUrlParser: true })
 mongoose.connection.once('open', () => {
@@ -18,4 +20,16 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }))
 
-app.listen(4000)
+
+    const appPath = path.join(__dirname, '../book_event', 'build')
+    app.use(express.static(appPath))
+
+    app.get('*', (request, response) => {
+        response.sendFile(path.resolve(appPath, 'index.html'))
+    })
+
+
+
+
+const PORT = process.env.PORT || 4000
+app.listen(PORT)
