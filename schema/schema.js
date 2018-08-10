@@ -119,11 +119,14 @@ const Mutation = new GraphQLObjectType({
         deleteImage: {
             type: ImageType,
             args: {
-                id: {type: GraphQLID}
+                id: {type: new GraphQLNonNull(GraphQLID)}
             },
             resolve(parent, args){
-                let deletedImage = Image.findById(args.id)
-                return deletedImage.remove()
+                let deletedImage = Image.findByIdAndRemove(args.id).exec();
+                if (!deletedImage) {
+                    throw new Error('Error')
+                  }
+                  return deletedImage;
             }
         }
     }
